@@ -92,7 +92,7 @@ const requiredColumns = [
             }, 500);
           } catch (err: any) {
             console.log("CSV Upload Error:", err);
-            setError(err.message || "Failed to upload patients.");
+            setError(`Upload Error: ${err.message || "Failed to upload patients."}`);
           } finally {
             setUploading(false);
           }
@@ -148,6 +148,7 @@ const requiredColumns = [
       </Card>
     );
   }
+
 
 
 
