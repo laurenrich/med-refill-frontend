@@ -130,15 +130,7 @@ const requiredColumns = [
           </div>
           {error && (
             <div className="text-red-500 font-medium border border-red-200 bg-red-50 rounded px-3 py-2">
-              {error.includes("Missing columns") ? (
-                "Missing required columns. Please use the template above."
-              ) : error.includes("CSV Parse Error") ? (
-                "Invalid CSV file format."
-              ) : error.includes("Failed to upload") ? (
-                "Upload failed. Please try again."
-              ) : (
-                "Error importing CSV. Please check your file and try again."
-              )}
+              {error}
             </div>
           )}
           {success && <div className="text-green-600 font-medium border border-green-200 bg-green-50 rounded px-3 py-2">Patients uploaded successfully!</div>}
@@ -148,6 +140,9 @@ const requiredColumns = [
       </Card>
     );
   }
+
+
+
 
 
 
