@@ -49,21 +49,12 @@ const requiredColumns = [
         header: true,
         skipEmptyLines: true,
         complete: async (results: any) => {
-          console.log("CSV Parse Results:", results);
-          console.log("Found columns:", results.meta.fields);
-          console.log("Required columns:", requiredColumns);
-          
           const missing = requiredColumns.filter(col => !results.meta.fields?.includes(col));
-          console.log("Missing columns:", missing);
           
           if (missing.length) {
-            console.log("CSV Validation Failed - Missing columns:", missing);
-            setError(`Missing columns: ${missing.join(", ")}`);
+            setError(`Missing columns: ${missing.join(", ")}. Found: ${results.meta.fields?.join(", ") || "none"}`);
             return;
           }
-          console.log("Current user:", authState.user);
-          console.log("User ID being used:", authState.user?.id || 1);
-          
           const patients = results.data.map((row: any) => ({
             patient_id: row.patient_id,
             name: row.name,
@@ -106,10 +97,7 @@ const requiredColumns = [
             setUploading(false);
           }
         },
-        error: (err: any) => {
-          console.log("Papa Parse Error:", err);
-          setError(`CSV Parse Error: ${err.message}`);
-        },
+        error: (err: any) => setError(`CSV Parse Error: ${err.message}`),
       });
     };
   
@@ -160,7 +148,6 @@ const requiredColumns = [
       </Card>
     );
   }
-
 
 
 
