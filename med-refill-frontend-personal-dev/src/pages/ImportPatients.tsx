@@ -1,4 +1,53 @@
-e,
+import React, { useRef, useState } from "react";
+import Papa from "papaparse";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { UploadCloud } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
+
+const requiredColumns = [
+  "patient_id","name","medication","refill_request_date","last_filled",
+  "last_visit","labs","diagnosis","refill_notes","icd_notes","age","gender",
+  "allergies","comorbidities","refill_history"
+];
+  
+
+  export function ImportPatients() {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [error, setError] = useState("");
+    const { authState } = useAuth();
+
+    const [uploading, setUploading] = useState(false);
+    const [success, setSuccess] = useState(false);
+  
+    const handleDownloadTemplate = () => {
+      const sampleCsv = requiredColumns.join(",") + "\n" +
+        "P007,John Doe,Hydrochlorothiazide 25mg,2025-05-30,2025-04-04,2024-02-27,\"Stable electrolytes\",Hypertension,\"Patient seen last month, BP well-controlled, compliant with regimen.\",\"Patient presents with hypertension symptoms\",68,F,\"Sulfa drugs\",None,\"Frequently requests early refills\"\n";
+      const blob = new Blob([sampleCsv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "patient-template.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+  
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setError("");
+      setSuccess(false);
+      const file = e.target.files?.[0];
+      if (!file) return;
+  
+      if (file.type !== "text/csv" && !file.name.endsWith(".csv")) {
+        setError("Please upload a valid CSV file.");
+        return;
+      }
+  
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
         complete: async (results: any) => {
           console.log("CSV Parse Results:", results);
           console.log("Found columns:", results.meta.fields);
@@ -111,5 +160,8 @@ e,
       </Card>
     );
   }
+
+
+
 
 
