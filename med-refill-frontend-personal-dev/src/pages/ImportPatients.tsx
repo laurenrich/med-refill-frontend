@@ -72,19 +72,23 @@ const requiredColumns = [
             gender: row.gender,
             allergies: row.allergies,
             comorbidities: row.comorbidities,
-            refill_history: row.refill_history,
-            user_id: authState.user?.id
+            refill_history: row.refill_history
           }));
           setUploading(true);
           try {
+            console.log("Sending patients:", patients);
+            console.log("API URL:", `${API_BASE}/api/v1/patients/batch`);
             const response = await fetch(`${API_BASE}/api/v1/patients/batch`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(patients),
               credentials: "include",
             });
+            console.log("Response status:", response.status);
             if (!response.ok) {
-              throw new Error(await response.text());
+              const errorText = await response.text();
+              console.log("Error response:", errorText);
+              throw new Error(errorText);
             }
             setSuccess(true);
             setError("");
