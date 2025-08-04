@@ -136,9 +136,9 @@ const requiredColumns = [
               ) : error.includes("CSV Parse Error") ? (
                 "Invalid CSV file format."
               ) : error.includes("Upload Error") ? (
-                "Upload failed. Please try again."
+                `Upload failed: ${error}`
               ) : (
-                "Error importing CSV. Please check your file and try again."
+                `Error importing CSV: ${error}`
               )}
             </div>
           )}
@@ -155,10 +155,6 @@ const requiredColumns = [
       </Card>
     );
   }
-
-
-
-
 
 
 
