@@ -3,7 +3,6 @@ import Papa from "papaparse";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { UploadCloud } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
@@ -17,7 +16,7 @@ const requiredColumns = [
   export function ImportPatients() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [error, setError] = useState("");
-    const { authState } = useAuth();
+  
 
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -159,12 +158,6 @@ const requiredColumns = [
       </Card>
     );
   }
-
-
-
-
-
-
 
 
 
