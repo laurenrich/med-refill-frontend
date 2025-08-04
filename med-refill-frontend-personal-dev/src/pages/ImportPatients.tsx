@@ -70,7 +70,7 @@ const requiredColumns = [
             allergies: row.allergies,
             comorbidities: row.comorbidities,
             refill_history: row.refill_history,
-            user_id: authState.user?.id
+            user_id: authState.user?.id || 1
           }));
           setUploading(true);
           try {
