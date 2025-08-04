@@ -24,7 +24,8 @@ const requiredColumns = [
   
     const handleDownloadTemplate = () => {
       const sampleCsv = requiredColumns.join(",") + "\n" +
-        "P007,John Doe,Hydrochlorothiazide 25mg,2025-05-30,2025-04-04,2024-02-27,\"Stable electrolytes\",Hypertension,\"Patient seen last month, BP well-controlled, compliant with regimen.\",\"Patient presents with hypertension symptoms\",68,F,\"Sulfa drugs\",None,\"Frequently requests early refills\"\n";
+        "P001,Jane Doe,Levothyroxine 50mcg,2025-05-25,2025-04-22,2024-02-24,\"TSH = 2.4, T4 normal\",Hypothyroidism,\"Routine refill, no recent adverse events, within visit window.\",\"Patient presents with vomiting. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely vomiting, unspecified.\",48,Female,Penicillin,\"Obesity, Hyperlipidemia\",\"First time refill\"\n" +
+        "P002,John Smith,Omeprazole 20mg,2025-06-01,2025-04-29,2025-03-15,\"No active GI symptoms\",GERD,\"Labs outdated, unclear if condition is controlled.\",\"Patient presents with joint pain. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely pain in unspecified joint.\",45,Male,NSAIDs,\"Obesity, Hyperlipidemia\",\"Missed last 2 refills\"\n";
       const blob = new Blob([sampleCsv], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -48,6 +49,7 @@ const requiredColumns = [
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
+        transformHeader: (header) => header.trim(),
         complete: async (results: any) => {
           const missing = requiredColumns.filter(col => !results.meta.fields?.includes(col));
           
@@ -91,7 +93,6 @@ const requiredColumns = [
               window.dispatchEvent(new CustomEvent('historyUpdated'));
             }, 500);
           } catch (err: any) {
-            console.log("CSV Upload Error:", err);
             setError(`Upload Error: ${err.message || "Failed to upload patients."}`);
           } finally {
             setUploading(false);
@@ -130,7 +131,15 @@ const requiredColumns = [
           </div>
           {error && (
             <div className="text-red-500 font-medium border border-red-200 bg-red-50 rounded px-3 py-2">
-              {error}
+              {error.includes("Missing columns") ? (
+                "Missing required columns. Please use the template above."
+              ) : error.includes("CSV Parse Error") ? (
+                "Invalid CSV file format."
+              ) : error.includes("Upload Error") ? (
+                "Upload failed. Please try again."
+              ) : (
+                "Error importing CSV. Please check your file and try again."
+              )}
             </div>
           )}
           {/* Temporary debug info */}
@@ -146,6 +155,9 @@ const requiredColumns = [
       </Card>
     );
   }
+
+
+
 
 
 
