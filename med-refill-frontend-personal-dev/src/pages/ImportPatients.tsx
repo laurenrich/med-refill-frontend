@@ -3,6 +3,7 @@ import Papa from "papaparse";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { UploadCloud } from "lucide-react";
+import { usePatients } from "@/context/PatientContext";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
@@ -16,7 +17,7 @@ const requiredColumns = [
   export function ImportPatients() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [error, setError] = useState("");
-  
+    const { refreshPatients } = usePatients();
 
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -75,26 +76,20 @@ const requiredColumns = [
           }));
           setUploading(true);
           try {
-            console.log("Sending patients:", patients);
-            console.log("API URL:", `${API_BASE}/api/v1/patients/batch`);
             const response = await fetch(`${API_BASE}/api/v1/patients/batch`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(patients),
               credentials: "include",
             });
-            console.log("Response status:", response.status);
             if (!response.ok) {
               const errorText = await response.text();
-              console.log("Error response:", errorText);
               throw new Error(errorText);
             }
             setSuccess(true);
             setError("");
-            // Trigger refresh of patient lists with a small delay
-            setTimeout(() => {
-              window.dispatchEvent(new CustomEvent('historyUpdated'));
-            }, 500);
+            // Refresh patient data immediately
+            refreshPatients();
           } catch (err: any) {
             setError(`Upload Error: ${err.message || "Failed to upload patients."}`);
           } finally {
@@ -158,6 +153,4 @@ const requiredColumns = [
       </Card>
     );
   }
-
-
 
