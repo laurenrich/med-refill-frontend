@@ -33,7 +33,7 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { authState } = useAuth();
 
-  useEffect(() => {
+  const fetchPatients = () => {
     setLoading(true);
     fetch(`${API_BASE}/api/v1/patients`, { credentials: 'include' })
       .then(res => {
@@ -54,6 +54,20 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
+  // Listen for patient updates
+  useEffect(() => {
+    const handlePatientUpdate = () => {
+      fetchPatients();
+    };
+    
+    window.addEventListener('patientUpdated', handlePatientUpdate);
+    return () => window.removeEventListener('patientUpdated', handlePatientUpdate);
   }, []);
 
   // Handle navigation to specific patient from outside
@@ -82,6 +96,9 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
     setPatients((prev: any[]) => prev.map(p => p.patient_id === editForm.patient_id ? { ...editForm } : p));
     setEditPatient(null);
     setEditForm(null);
+    // Trigger global update for all components
+    window.dispatchEvent(new CustomEvent('patientUpdated'));
+    window.dispatchEvent(new CustomEvent('historyUpdated'));
   };
 
   const handleDelete = async (patient: any) => {
@@ -91,6 +108,9 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
     });
     setPatients((prev: any[]) => prev.filter(p => p.patient_id !== patient.patient_id));
     setShowDelete({ open: false, patient: null });
+    // Trigger global update for all components
+    window.dispatchEvent(new CustomEvent('patientUpdated'));
+    window.dispatchEvent(new CustomEvent('historyUpdated'));
   };
 
   const handleCreateSubmit = async (e: any) => {
@@ -105,6 +125,9 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
     setPatients((prev: any[]) => [...prev, newPatient]);
     setShowCreate(false);
     setCreateForm({ name: '', patient_id: '', age: '', gender: '', isActive: true });
+    // Trigger global update for all components
+    window.dispatchEvent(new CustomEvent('patientUpdated'));
+    window.dispatchEvent(new CustomEvent('historyUpdated'));
   };
 
   if (selectedPatientId) {
