@@ -17,7 +17,7 @@ const requiredColumns = [
   export function ImportPatients() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [error, setError] = useState("");
-    const { refreshPatients } = usePatients();
+    const { triggerGlobalUpdate } = usePatients();
 
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -88,8 +88,8 @@ const requiredColumns = [
             }
             setSuccess(true);
             setError("");
-            // Refresh patient data immediately
-            refreshPatients();
+            // Trigger global update for all components
+            triggerGlobalUpdate();
           } catch (err: any) {
             setError(`Upload Error: ${err.message || "Failed to upload patients."}`);
           } finally {
@@ -140,12 +140,7 @@ const requiredColumns = [
               )}
             </div>
           )}
-          {/* Temporary debug info */}
-          <div className="text-xs text-gray-500 bg-gray-100 p-2 rounded">
-            <strong>Debug Info:</strong><br/>
-            Required: {requiredColumns.join(", ")}<br/>
-            Found: {error.includes("Found:") ? error.split("Found: ")[1] : "Check console"}
-          </div>
+
           {success && <div className="text-green-600 font-medium border border-green-200 bg-green-50 rounded px-3 py-2">Patients uploaded successfully!</div>}
           {uploading && <div className="text-blue-600 font-medium">Uploading...</div>}
 
@@ -153,4 +148,7 @@ const requiredColumns = [
       </Card>
     );
   }
+
+
+
 
