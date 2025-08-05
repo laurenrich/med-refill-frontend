@@ -32,6 +32,7 @@ export interface Patient {
 interface PatientContextType {
     patients: Patient[];
     setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
+    refreshPatients: () => void;
 }
 
 const PatientContext = createContext<PatientContextType | undefined>(undefined);
@@ -47,7 +48,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 export function PatientProvider({ children }: { children: React.ReactNode }) {
     const [patients, setPatients] = useState<Patient[]>([]);
 
-    useEffect(() => {
+    const fetchPatients = () => {
       fetch(`${API_BASE}/api/v1/patients`, { credentials: "include" })
         .then(res => {
           if (!res.ok) {
@@ -78,10 +79,14 @@ export function PatientProvider({ children }: { children: React.ReactNode }) {
           console.error("Error fetching patients:", error);
           setPatients([]);
         });
+    };
+
+    useEffect(() => {
+      fetchPatients();
     }, []);
 
     return (
-        <PatientContext.Provider value={{ patients, setPatients }}>
+        <PatientContext.Provider value={{ patients, setPatients, refreshPatients: fetchPatients }}>
             {children}
         </PatientContext.Provider>
     );
