@@ -33,6 +33,7 @@ interface PatientContextType {
     patients: Patient[];
     setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
     refreshPatients: () => void;
+    triggerGlobalUpdate: () => void;
 }
 
 const PatientContext = createContext<PatientContextType | undefined>(undefined);
@@ -85,8 +86,14 @@ export function PatientProvider({ children }: { children: React.ReactNode }) {
       fetchPatients();
     }, []);
 
+    const triggerGlobalUpdate = () => {
+      fetchPatients();
+      window.dispatchEvent(new CustomEvent('patientUpdated'));
+      window.dispatchEvent(new CustomEvent('historyUpdated'));
+    };
+
     return (
-        <PatientContext.Provider value={{ patients, setPatients, refreshPatients: fetchPatients }}>
+        <PatientContext.Provider value={{ patients, setPatients, refreshPatients: fetchPatients, triggerGlobalUpdate }}>
             {children}
         </PatientContext.Provider>
     );
