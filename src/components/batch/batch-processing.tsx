@@ -62,6 +62,7 @@ function getPatientStatus(patient: any) {
 export function BatchProcessing() {
   const [selectedPatients, setSelectedPatients] = useState<any[]>([])
   const [processingResults, setProcessingResults] = useState<any[]>([])
+  const [processedPatients, setProcessedPatients] = useState<any[]>([])
   const [showResults, setShowResults] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -238,6 +239,7 @@ export function BatchProcessing() {
       }
       const data = await response.json();
       setProcessingResults(data.results || []);
+      setProcessedPatients([...selectedPatients]); // Store processed patients for display
       setShowResults(true);
 
       if (authState.user) {
@@ -616,7 +618,7 @@ export function BatchProcessing() {
               <CardContent className="pt-0">
                 <div className="space-y-4">
                   {processingResults.map((result: any, index: number) => {
-                    const patient = selectedPatients[index];
+                    const patient = processedPatients[index];
                     return (
                       <div key={index} className="p-4 rounded-lg bg-white border border-gray-100">
                         <h4 className="text-base font-semibold text-gray-900 mb-3">
