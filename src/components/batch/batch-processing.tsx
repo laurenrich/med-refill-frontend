@@ -364,6 +364,9 @@ export function BatchProcessing() {
           console.error("Failed to refresh patient list:", await refreshRes.text());
         }
 
+        // Clear selected patients after successful processing
+        setSelectedPatients([]);
+
       }
     } catch (err: any) {
       setError(err.message || "Unknown error");
