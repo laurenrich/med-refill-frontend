@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ArrowLeft, BarChart3, Clock, FileText, Home, LogOut, Search, UploadCloud, Users } from "lucide-react"
+import { ArrowLeft, BarChart3, Clock, Home, LogOut, UploadCloud, Users } from "lucide-react"
 import { useAuth } from "@/context/AuthContext";
 
 interface AppHeaderProps {

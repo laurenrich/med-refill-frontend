@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ArrowUpRight, Clock, CheckCircle, AlertCircle, FileText, Loader2, Users, Heart, BookOpen, RefreshCw, Calendar } from "lucide-react"
+import { Clock, CheckCircle, AlertCircle, FileText, Loader2, Users, Heart, BookOpen } from "lucide-react"
 import HistoryDialog from "@/components/history/history-dialog"
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
@@ -39,52 +38,9 @@ export function PatientDashboard({ onNavigateToPatient, onNavigateToHistory, onN
   });
 
   // Calculate patient status counts using the same logic as batch processing
-  const getPatientStatusCounts = () => {
-    // Import the same functions used in batch processing
-    const isPatientReady = (patient: any) => {
-      const requiredFields = [
-        "patient_id", "name", "age", "gender", "diagnosis", "comorbidities", 
-        "allergies", "icd_notes", "labs", "medication", "refill_request_date", 
-        "last_filled", "refill_history", "refill_notes"
-      ];
-      for (const field of requiredFields) {
-        const value = patient[field];
-        if (value === null || value === undefined || value.toString().trim() === "") {
-          return false;
-        }
-      }
-      return true;
-    };
 
-    const getPatientStatus = (patient: any) => {
-      const hasBeenProcessed = patient.last_processed_request_date;
-      
-      if (!isPatientReady(patient)) {
-        return { label: "Incomplete", color: "bg-yellow-100 text-yellow-800", icon: "alert" };
-      }
-      
-      if (hasBeenProcessed) {
-        const lastProcessedDate = patient.last_processed_request_date;
-        const currentRequestDate = patient.refill_request_date;
-        
-        if (lastProcessedDate !== currentRequestDate) {
-          return { label: "Ready", color: "bg-blue-100 text-blue-800", icon: "clock" };
-        }
-        
-        return { label: "Up-to-date", color: "bg-green-100 text-green-800", icon: "check" };
-      }
-      
-      return { label: "Ready", color: "bg-blue-100 text-blue-800", icon: "clock" };
-    };
 
-    const readyCount = patients.filter((p: any) => getPatientStatus(p).label === "Ready").length;
-    const incompleteCount = patients.filter((p: any) => getPatientStatus(p).label === "Incomplete").length;
-    const upToDateCount = patients.filter((p: any) => getPatientStatus(p).label === "Up-to-date").length;
 
-    return { readyCount, incompleteCount, upToDateCount };
-  };
-
-  const patientStatusCounts = getPatientStatusCounts();
 
     const fetchDashboardData = async () => {
     console.log("=== fetchDashboardData called ===");

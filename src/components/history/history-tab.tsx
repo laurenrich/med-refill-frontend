@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { CheckCircle, AlertCircle, Clock, FileText, ChevronRight } from "lucide-react";
 import HistoryDialog from "@/components/history/history-dialog";
 
@@ -377,7 +375,7 @@ export function PatientHistory({ patientId, onNavigateToPatient, activeTab, init
                     
                     {/* Timeline Entries */}
                     <div className="pl-6 space-y-3">
-                      {entries.map((h: any, index: number) => (
+                      {entries.map((h: any) => (
                         <div
                           key={h.id}
                           className="p-4 rounded-xl border border-gray-100 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:bg-gray-50 transition-all duration-200 cursor-pointer"

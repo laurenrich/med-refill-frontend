@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { usePatients } from "@/context/PatientContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, CheckCircle, AlertCircle, Clock, Users, Play } from "lucide-react";
+import { RefreshCw, CheckCircle, Clock, Users, Play } from "lucide-react";
 
 const BatchTab: React.FC = () => {
     const [selected, setSelected] = useState<any[]>([]);

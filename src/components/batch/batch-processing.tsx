@@ -1,10 +1,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { Search, CheckCircle, AlertCircle, Clock, Pencil, BarChart3, ArrowUpRight, RefreshCw, Users, User } from "lucide-react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Search, CheckCircle, AlertCircle, Clock, BarChart3, ArrowUpRight, RefreshCw, Users, User } from "lucide-react"
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -66,14 +63,10 @@ export function BatchProcessing() {
   const [selectedPatients, setSelectedPatients] = useState<any[]>([])
   const [processingResults, setProcessingResults] = useState<any[]>([])
   const [showResults, setShowResults] = useState(false)
-  const [activeResultTab, setActiveResultTab] = useState("all")
-  const [selectedResult, setSelectedResult] = useState<any>(null);
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const [patients, setPatients] = useState<any[]>([]);
-  const [editPatient, setEditPatient] = useState<any | null>(null);
-  const [editForm, setEditForm] = useState<any | null>(null);
   const [fetching, setFetching] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const { authState } = useAuth();
@@ -689,57 +682,4 @@ export function BatchProcessing() {
   );
 }
 
-function ResultsTable({ results, onViewDetails, selectedPatients }: { results: any[]; onViewDetails: (result: any, idx: number) => void; selectedPatients: any[] }) {
-  return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Patient ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Prescription Decision</TableHead>
-            <TableHead>ICD Codes</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {results.map((result, idx) => {
-            const patient = selectedPatients?.[idx];
-            const decision = result.refill_decision?.decision || "";
-            const d = decision.toLowerCase();
-            return (
-              <TableRow key={patient?.patient_id || result.patientId || result.patient_id} className="hover:bg-transparent">
-                <TableCell className="font-medium">{patient?.patient_id}</TableCell>
-                <TableCell>{patient?.name}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    {d === "approve" ? (
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                    ) : d === "deny" ? (
-                      <AlertCircle className="h-4 w-4 text-red-500" />
-                    ) : d === "escalate" || d === "review required" ? (
-                      <Clock className="h-4 w-4 text-yellow-500" />
-                    ) : null}
-                    {decision}
-                  </div>
-                </TableCell>
-                <TableCell>{(result.icd_prediction?.predictions?.map((p: any) => p.icd_code).join(", "))}</TableCell>
-                <TableCell>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => onViewDetails(result, idx)}
-                    className="flex items-center gap-1"
-                  >
-                    <ArrowUpRight className="h-4 w-4" />
-                    <span>View</span>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
-  )
-}
+

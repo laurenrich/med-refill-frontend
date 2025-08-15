@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, User, Pill, Check, X, Clock, Heart, TestTube } from "lucide-react"
 import { PatientHistory } from "@/components/history/history-tab"
 

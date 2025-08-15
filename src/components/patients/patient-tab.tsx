@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Pencil, Trash2, Plus, Search, Loader2, RefreshCw, Users, CheckCircle, AlertCircle, Clock, User } from 'lucide-react';
+import { Pencil, Trash2, Plus, Search, Loader2, Users, CheckCircle, AlertCircle, Clock, User } from 'lucide-react';
 import { PatientProfile } from './patient-profile';
 import { useAuth } from '@/context/AuthContext';
 
@@ -75,7 +74,7 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
   const [editForm, setEditForm] = useState<any | null>(null);
   const [showDelete, setShowDelete] = useState<{ open: boolean, patient: any | null }>({ open: false, patient: null });
   const [showCreate, setShowCreate] = useState(false);
-  const [showAnalysis, setShowAnalysis] = useState(false);
+
   const [analysisPatient, setAnalysisPatient] = useState<any>(null);
   const [analysisTypes, setAnalysisTypes] = useState({
     prescriptionRefill: true,
@@ -145,7 +144,6 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
   const handleQuickAnalysis = (patient: any) => {
     setAnalysisPatient(patient);
     setAnalysisResults(null);
-    setShowAnalysis(true);
   };
 
   const handleAnalysisTypeChange = (type: keyof typeof analysisTypes, checked: boolean) => {
