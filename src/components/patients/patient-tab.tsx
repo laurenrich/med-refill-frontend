@@ -136,6 +136,49 @@ function PatientsList({ patientToNavigateTo, onPatientNavigated }: PatientsListP
     }
   }, [patientToNavigateTo, onPatientNavigated]);
 
+  // Listen for patient updates from other components
+  useEffect(() => {
+    const handlePatientUpdate = () => {
+      console.log("Patient tab received patientUpdated event, refreshing patients");
+      // Refetch patients when they're updated elsewhere
+      if (authState.isAuthenticated) {
+        setLoading(true);
+        fetch(`${API_BASE}/api/v1/patients`, { credentials: "include" })
+          .then(res => {
+            if (!res.ok) {
+              if (res.status === 401) {
+                throw new Error("Please log in to view patients");
+              }
+              throw new Error("Failed to fetch patients");
+            }
+            return res.json();
+          })
+          .then((allPatients) => {
+            if (!Array.isArray(allPatients)) {
+              console.error("Expected array but got:", allPatients);
+              setPatients([]);
+              return;
+            }
+            
+            const processedPatients = allPatients.map((patient: any) => ({
+              ...patient,
+              last_processed_request_date: patient.last_processed_request_date 
+                ? (typeof patient.last_processed_request_date === 'object' 
+                    ? patient.last_processed_request_date.toISOString().split('T')[0]
+                    : patient.last_processed_request_date)
+                : patient.last_processed_request_date
+            }));
+            setPatients(processedPatients);
+          })
+          .catch(err => setError(err.message))
+          .finally(() => setLoading(false));
+      }
+    };
+    
+    window.addEventListener('patientUpdated', handlePatientUpdate);
+    return () => window.removeEventListener('patientUpdated', handlePatientUpdate);
+  }, [authState.isAuthenticated]);
+
   const handleEdit = (patient: any) => {
     setEditPatient(patient);
     setEditForm({ ...patient });

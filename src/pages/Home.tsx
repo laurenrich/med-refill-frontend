@@ -7,10 +7,12 @@ import { PatientHistory } from '../components/history/history-tab';
 import { AppHeader } from '../components/ui/app-header';
 import PatientsList from '../components/patients/patient-tab';
 import { PatientProfile } from '../components/patients/patient-profile';
+import { DemoModal } from '../components/ui/demo-modal';
 
 const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showDemoModal, setShowDemoModal] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [patientToNavigateTo, setPatientToNavigateTo] = useState<string | null>(null);
   const [historyFilter, setHistoryFilter] = useState<string | null>(null);
@@ -22,6 +24,7 @@ const Home: React.FC = () => {
         activeTab={activeTab} 
         onTabChange={setActiveTab}
         onUpload={() => setShowUploadModal(true)}
+        onDemo={() => setShowDemoModal(true)}
         showBackButton={!!selectedPatientId}
         onBack={() => setSelectedPatientId(null)}
       />
@@ -90,6 +93,21 @@ const Home: React.FC = () => {
               ✕
             </button>
             <ImportPatients />
+          </div>
+        </div>
+      )}
+
+      {/* Demo Modal */}
+      {showDemoModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="w-full max-w-md relative">
+            <button 
+              onClick={() => setShowDemoModal(false)}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors duration-200 text-2xl font-light"
+            >
+              ✕
+            </button>
+            <DemoModal onClose={() => setShowDemoModal(false)} />
           </div>
         </div>
       )}

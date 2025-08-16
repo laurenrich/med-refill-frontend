@@ -39,10 +39,18 @@ export function PatientDashboard({ onNavigateToPatient, onNavigateToHistory, onN
 
   // Calculate patient status counts using the same logic as batch processing
 
+  // Listen for patient updates from other components
+  useEffect(() => {
+    const handlePatientUpdate = () => {
+      console.log("Dashboard received patientUpdated event, refreshing data");
+      fetchDashboardData();
+    };
+    
+    window.addEventListener('patientUpdated', handlePatientUpdate);
+    return () => window.removeEventListener('patientUpdated', handlePatientUpdate);
+  }, []);
 
-
-
-    const fetchDashboardData = async () => {
+  const fetchDashboardData = async () => {
     console.log("=== fetchDashboardData called ===");
     console.log("API_BASE:", API_BASE);
     setLoading(true);
@@ -221,15 +229,9 @@ export function PatientDashboard({ onNavigateToPatient, onNavigateToHistory, onN
       fetchDashboardData();
     };
 
-    const handlePatientUpdate = () => {
-      fetchDashboardData();
-    };
-
     window.addEventListener('historyUpdated', handleHistoryUpdate);
-    window.addEventListener('patientUpdated', handlePatientUpdate);
     return () => {
       window.removeEventListener('historyUpdated', handleHistoryUpdate);
-      window.removeEventListener('patientUpdated', handlePatientUpdate);
     };
   }, []);
 
@@ -252,6 +254,8 @@ export function PatientDashboard({ onNavigateToPatient, onNavigateToHistory, onN
 
   return (
     <div className="space-y-4 pb-8">
+
+
       {/* Top Stats Row */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto">
         <Card 

@@ -65,6 +65,8 @@ export function PatientProvider({ children }: { children: React.ReactNode }) {
             return;
           }
           
+
+          
           // Convert date objects to strings if they exist
           const processedPatients = allPatients.map((patient: any) => ({
             ...patient,
@@ -84,6 +86,17 @@ export function PatientProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
       fetchPatients();
+    }, []);
+
+    // Listen for patient updates from other components
+    useEffect(() => {
+      const handlePatientUpdate = () => {
+        console.log("PatientContext received patientUpdated event, refreshing patients");
+        fetchPatients();
+      };
+      
+      window.addEventListener('patientUpdated', handlePatientUpdate);
+      return () => window.removeEventListener('patientUpdated', handlePatientUpdate);
     }, []);
 
     const triggerGlobalUpdate = () => {

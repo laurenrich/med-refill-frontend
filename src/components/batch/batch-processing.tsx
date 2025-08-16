@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Search, CheckCircle, AlertCircle, Clock, BarChart3, ArrowUpRight, RefreshCw, Users, User } from "lucide-react"
+import { Search, CheckCircle, AlertCircle, Clock, BarChart3, ArrowUpRight, RefreshCw, Users, User, X } from "lucide-react"
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -607,14 +607,26 @@ export function BatchProcessing() {
           {showResults && (
             <Card className="border-0 bg-gray-50 shadow-[0_2px_4px_rgba(0,0,0,0.05)] rounded-xl sticky top-12">
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-gray-900">
-                  <ArrowUpRight className="h-5 w-5 text-primary" />
-                  Processing Results
-                </CardTitle>
-                <CardDescription className="text-gray-500">
-                  {processingResults.length} patients processed
-                </CardDescription>
-                </CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2 text-gray-900">
+                      <ArrowUpRight className="h-5 w-5 text-primary" />
+                      Processing Results
+                    </CardTitle>
+                    <CardDescription className="text-gray-500">
+                      {processingResults.length} patients processed
+                    </CardDescription>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowResults(false)}
+                    className="h-8 w-8 p-0 hover:bg-gray-200"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardHeader>
               <CardContent className="pt-0">
                 <div className="space-y-4">
                   {processingResults.map((result: any, index: number) => {

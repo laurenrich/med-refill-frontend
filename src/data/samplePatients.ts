@@ -3,13 +3,13 @@ import type { Patient } from "../types/patient";
 export const samplePatients: Patient[] = [
   {
     id: "P001",
-    name: "Patient P001",
+    name: "Jane Doe",
     age: 48,
     gender: "F",
     lastVisit: "2024-02-24",
     diagnosis: "Hypothyroidism",
     medication: "Levothyroxine 50mcg",
-    icdNote: "48-year-old female reports fatigue, weight gain, and feeling cold. No palpitations or chest pain. Physical exam shows dry skin.",
+    icdNote: "Patient presents with vomiting. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely vomiting, unspecified.",
     icdPmh: "Obesity, Hyperlipidemia",
     refillRequestDate: "2025-05-25",
     lastFilled: "2025-04-22",
@@ -17,17 +17,18 @@ export const samplePatients: Patient[] = [
     allergies: "Penicillin",
     comorbidities: "Obesity, Hyperlipidemia",
     refillHistory: "First time refill",
-    notes: "Routine refill, no recent adverse events, within visit window."
+    notes: "Routine refill, no recent adverse events, within visit window.",
+    last_processed_request_date: "2025-05-25" // Already processed - shows "Up-to-date"
   },
   {
     id: "P002",
-    name: "Patient P002",
+    name: "John Smith",
     age: 45,
     gender: "M",
     lastVisit: "2025-03-15",
     diagnosis: "GERD",
     medication: "Omeprazole 20mg",
-    icdNote: "45-year-old male complains of heartburn after meals, occasional regurgitation, and sour taste in mouth. No weight loss or dysphagia.",
+    icdNote: "Patient presents with joint pain. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely pain in unspecified joint.",
     icdPmh: "Obesity, Hyperlipidemia",
     refillRequestDate: "2025-06-01",
     lastFilled: "2025-04-29",
@@ -35,17 +36,18 @@ export const samplePatients: Patient[] = [
     allergies: "NSAIDs",
     comorbidities: "Obesity, Hyperlipidemia",
     refillHistory: "Missed last 2 refills",
-    notes: "Labs outdated, unclear if condition is controlled."
+    notes: "Labs outdated, unclear if condition is controlled.",
+    last_processed_request_date: "2025-05-20" // Processed but needs update - shows "Ready"
   },
   {
-    id: "P004",
-    name: "Patient P004",
+    id: "P003",
+    name: "Bob Johnson",
     age: 40,
     gender: "M",
     lastVisit: "2024-06-27",
     diagnosis: "Depression",
     medication: "Sertraline 50mg",
-    icdNote: "40-year-old male reports persistent low mood, poor sleep, and loss of interest in activities. No suicidal ideation. Appetite decreased.",
+    icdNote: "Patient presents with headache. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely headache.",
     icdPmh: "Depression, Anxiety",
     refillRequestDate: "2025-06-02",
     lastFilled: "2025-04-10",
@@ -54,16 +56,17 @@ export const samplePatients: Patient[] = [
     comorbidities: "Depression, Anxiety",
     refillHistory: "Missed last 2 refills",
     notes: "Recent ER visit suggests need for provider input before refill."
+    // No processed date - shows "Ready" for new processing
   },
   {
-    id: "P007",
-    name: "Patient P007",
+    id: "P004",
+    name: "Mary Davis",
     age: 68,
     gender: "F",
     lastVisit: "2024-02-27",
     diagnosis: "Hypertension",
     medication: "Hydrochlorothiazide 25mg",
-    icdNote: "68-year-old female presents for follow-up. Reports occasional headaches and dizziness. Blood pressure readings at home have been elevated, averaging 150/95. No chest pain, palpitations, or shortness of breath.",
+    icdNote: "Patient presents with abdominal pain. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely abdominal pain, unspecified.",
     icdPmh: "None",
     refillRequestDate: "2025-05-30",
     lastFilled: "2025-04-04",
@@ -71,17 +74,18 @@ export const samplePatients: Patient[] = [
     allergies: "Sulfa drugs",
     comorbidities: "None",
     refillHistory: "Frequently requests early refills",
-    notes: "Patient seen last month, BP well-controlled, compliant with regimen."
+    notes: "Patient seen last month, BP well-controlled, compliant with regimen.",
+    last_processed_request_date: "2025-05-30" // Recently processed - shows "Up-to-date"
   },
   {
-    id: "P008",
-    name: "Patient P008",
+    id: "P005",
+    name: "Alex Taylor",
     age: 26,
     gender: "M",
     lastVisit: "2024-08-04",
     diagnosis: "Insomnia",
     medication: "Zolpidem 10mg",
-    icdNote: "26-year-old male reports difficulty falling asleep and frequent nighttime awakenings for the past month. No caffeine or stimulant use. No recent stressors identified.",
+    icdNote: "Patient presents with chest pain. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely chest pain, unspecified.",
     icdPmh: "Heart Failure",
     refillRequestDate: "2025-06-09",
     lastFilled: "2025-04-28",
@@ -90,6 +94,7 @@ export const samplePatients: Patient[] = [
     comorbidities: "Heart Failure",
     refillHistory: "Consistently refills on time",
     notes: "Labs outdated, unclear if condition is controlled."
+    // No processed date - shows "Ready" for new processing
   },
   {
     id: "P010",

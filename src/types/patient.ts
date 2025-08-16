@@ -15,4 +15,5 @@ export interface Patient {
     comorbidities: string;
     refillHistory: string;
     notes: string;
+    last_processed_request_date?: string; // Optional field for processed status
 }

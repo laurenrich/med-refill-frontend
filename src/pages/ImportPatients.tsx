@@ -8,7 +8,7 @@ import { usePatients } from "@/context/PatientContext";
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
 const requiredColumns = [
-  "patient_id","name","medication","refill_request_date","last_filled",
+  "patient_id","medication","patient_name","refill_request_date","last_filled",
   "last_visit","labs","diagnosis","refill_notes","icd_notes","age","gender",
   "allergies","comorbidities","refill_history"
 ];
@@ -21,11 +21,14 @@ const requiredColumns = [
 
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false);
+    
+
+    
   
-    const handleDownloadTemplate = () => {
-      const sampleCsv = requiredColumns.join(",") + "\n" +
-        "P001,Jane Doe,Levothyroxine 50mcg,2025-05-25,2025-04-22,2024-02-24,\"TSH = 2.4, T4 normal\",Hypothyroidism,\"Routine refill, no recent adverse events, within visit window.\",\"Patient presents with vomiting. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely vomiting, unspecified.\",48,Female,Penicillin,\"Obesity, Hyperlipidemia\",\"First time refill\"\n" +
-        "P002,John Smith,Omeprazole 20mg,2025-06-01,2025-04-29,2025-03-15,\"No active GI symptoms\",GERD,\"Labs outdated, unclear if condition is controlled.\",\"Patient presents with joint pain. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely pain in unspecified joint.\",45,Male,NSAIDs,\"Obesity, Hyperlipidemia\",\"Missed last 2 refills\"\n";
+      const handleDownloadTemplate = () => {
+    const sampleCsv = requiredColumns.join(",") + "\n" +
+      "P001,Levothyroxine 50mcg,Jane Doe,2025-05-25,2025-04-22,2024-02-24,\"TSH = 2.4, T4 normal\",Hypothyroidism,\"Routine refill, no recent adverse events, within visit window.\",\"Patient presents with vomiting. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely vomiting, unspecified.\",48,Female,Penicillin,\"Obesity, Hyperlipidemia\",\"First time refill\"\n" +
+      "P002,Omeprazole 20mg,John Smith,2025-06-01,2025-04-29,2025-03-15,\"No active GI symptoms\",GERD,\"Labs outdated, unclear if condition is controlled.\",\"Patient presents with joint pain. Symptoms started 2 days ago. Vitals stable. No prior history of this condition. Assessment: likely pain in unspecified joint.\",45,Male,NSAIDs,\"Obesity, Hyperlipidemia\",\"Missed last 2 refills\"\n";
       const blob = new Blob([sampleCsv], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -36,10 +39,13 @@ const requiredColumns = [
     };
   
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log("File change triggered");
       setError("");
       setSuccess(false);
       const file = e.target.files?.[0];
       if (!file) return;
+      
+      console.log("File selected:", file.name, file.size);
   
       if (file.type !== "text/csv" && !file.name.endsWith(".csv")) {
         setError("Please upload a valid CSV file.");
@@ -49,17 +55,23 @@ const requiredColumns = [
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        transformHeader: (header) => header.trim(),
+        dynamicTyping: false,
+        fastMode: false,
         complete: async (results: any) => {
+          console.log("Papa Parse - Raw parsed headers:", results.meta.fields);
+          console.log("Papa Parse - Required columns:", requiredColumns);
+          console.log("Papa Parse - Number of parsed headers:", results.meta.fields?.length);
+          
           const missing = requiredColumns.filter(col => !results.meta.fields?.includes(col));
           
           if (missing.length) {
             setError(`Missing columns: ${missing.join(", ")}. Found: ${results.meta.fields?.join(", ") || "none"}`);
             return;
           }
+          
           const patients = results.data.map((row: any) => ({
             patient_id: row.patient_id,
-            name: row.name,
+            name: row.patient_name,
             medication: row.medication,
             refill_request_date: row.refill_request_date,
             last_filled: row.last_filled,
@@ -96,7 +108,10 @@ const requiredColumns = [
             setUploading(false);
           }
         },
-        error: (err: any) => setError(`CSV Parse Error: ${err.message}`),
+        error: (err: any) => {
+          console.log("CSV Parse Error:", err);
+          setError(`CSV Parse Error: ${err.message}`);
+        },
       });
     };
   
@@ -144,6 +159,8 @@ const requiredColumns = [
               </Button>
             </label>
           </div>
+
+
 
           {/* Status Messages */}
           {error && (

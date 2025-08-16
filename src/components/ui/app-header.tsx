@@ -9,18 +9,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ArrowLeft, BarChart3, Clock, Home, LogOut, UploadCloud, Users } from "lucide-react"
+import { ArrowLeft, BarChart3, Clock, Home, LogOut, UploadCloud, Users, Play } from "lucide-react"
 import { useAuth } from "@/context/AuthContext";
 
 interface AppHeaderProps {
   activeTab: string;
   onTabChange: (value: string) => void;
   onUpload?: () => void;
+  onDemo?: () => void;
   showBackButton?: boolean;
   onBack?: () => void;
 }
 
-export function AppHeader({ activeTab, onTabChange, onUpload, showBackButton, onBack }: AppHeaderProps) {
+export function AppHeader({ activeTab, onTabChange, onUpload, onDemo, showBackButton, onBack }: AppHeaderProps) {
   const { authState, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const user: any = authState?.user || {};
@@ -115,10 +116,26 @@ export function AppHeader({ activeTab, onTabChange, onUpload, showBackButton, on
           </div>
         </div>
 
-        {/* Right: Upload + Profile */}
+        {/* Right: Demo + Upload + Profile */}
         <div className={`flex items-center transition-all duration-500 ease-out flex-shrink-0 ${
           isScrolled ? 'gap-0 bg-gray-100/90 backdrop-blur-md rounded-full px-4 py-2' : 'gap-3'
         }`}>
+          {/* Demo Button */}
+          <button
+            onClick={onDemo}
+            className={`group relative flex items-center justify-center transition-all duration-500 ease-out hover:scale-105 overflow-hidden rounded-full ${
+              isScrolled 
+                ? 'w-10 h-10 hover:w-auto hover:px-3 bg-transparent hover:bg-gray-100/50' 
+                : 'w-12 h-12 hover:w-auto hover:px-4 bg-green-100 hover:bg-green-200'
+            } text-green-600 hover:text-green-800`}
+            aria-label="Load Demo Data"
+          >
+            <Play className="w-5 h-5 transition-transform duration-300 group-hover:scale-105" />
+            <span className="font-medium text-sm whitespace-nowrap transition-all duration-300 text-green-700 hidden group-hover:block group-hover:ml-3 group-hover:relative group-hover:translate-x-0">
+              Demo
+            </span>
+          </button>
+
           {/* Upload Button */}
           <button
             onClick={onUpload}
